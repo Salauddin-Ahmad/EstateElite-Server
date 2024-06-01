@@ -8,6 +8,7 @@ import Root from "../Layouts/Root";
      children: [
         {
             path: '/',
+            element: <Home></Home>
         }
      ]
     },
