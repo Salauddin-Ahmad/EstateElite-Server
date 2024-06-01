@@ -1,104 +1,97 @@
-import { AiOutlineMenu } from 'react-icons/ai'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import avatarImg from '../assets/placeholder.jpg'
-import useAuth from '../Hooks/useAuth'
+import { NavLink } from "react-router-dom";
+import useAuth from "../hook/useAuth";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
+  const { user, logOut } = useAuth();
+  const navLinks = <>
+          <ul className="menu menu-horizontal px-1">
+     <li>
+     <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-green-600 rounded-lg border[#58d4db77]  font-bold  "
+                  : "font-bold "
+              }
+            >
+              <span className="p-2 text-lg font-bold">Home</span>
+            </NavLink>
+     </li>
 
+          {!user && (
+            <li>
+              <NavLink to="/login">
+                <span className="p-1  text-lg font-bold">Login</span>
+              </NavLink>
+            </li>
+          )}
+        </ul>
+  </>
   return (
-    <div className='fixed w-full bg-white z-10 shadow-sm'>
-      <div className='py-4 border-b-[1px]'>
-       
-          <div className='flex flex-row  items-center justify-between gap-3 md:gap-0'>
-            {/* Logo */}
-            <Link to='/'>
-              <img
-                // className='hidden md:block'
-                src='https://i.ibb.co/4ZXzmq5/logo.png'
-                alt='logo'
-                width='100'
-                height='100'
-              />
-            </Link>
-            {/* Dropdown Menu */}
-            <div className='relative'>
-              <div className='flex flex-row items-center gap-3'>
-                {/* Become A Host btn */}
-                <div className='hidden md:block'>
-                  {!user && (
-                    <button
-                      disabled={!user}
-                      className='disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition'
-                    >
-                      Host your home
-                    </button>
-                  )}
-                </div>
-                {/* Dropdown btn */}
-                <div
-                  onClick={() => setIsOpen(!isOpen)}
-                  className='p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition'
-                >
-                  <AiOutlineMenu />
-                  <div className='hidden md:block'>
-                    {/* Avatar */}
-                    <img
-                      className='rounded-full'
-                      referrerPolicy='no-referrer'
-                      src={user && user.photoURL ? user.photoURL : avatarImg}
-                      alt='profile'
-                      height='30'
-                      width='30'
-                    />
-                  </div>
-                </div>
-              </div>
-              {isOpen && (
-                <div className='absolute rounded-xl shadow-md w-[40vw] md:w-[10vw] bg-white overflow-hidden right-0 top-12 text-sm'>
-                  <div className='flex flex-col cursor-pointer'>
-                    <Link
-                      to='/'
-                      className='block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold'
-                    >
-                      Home
-                    </Link>
-
-                    {user ? (
-                      <>
-                        <div
-                          onClick={logOut}
-                          className='px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer'
-                        >
-                          Logout
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          to='/login'
-                          className='px-4 py-3 hover:bg-neutral-100 transition font-semibold'
-                        >
-                          Login
-                        </Link>
-                        <Link
-                          to='/signup'
-                          className='px-4 py-3 hover:bg-neutral-100 transition font-semibold'
-                        >
-                          Sign Up
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
+    <div className="navbar bg-[#FFFAE6] shadow-xl  mx-auto">
+      <div className="flex-1">
+        
+      <div className="dropdown relative">
+            <div tabIndex={0} role="button" className="btn btn-ghost ">
+            <NavLink to="/" className="flex gap-2 items-center">
+            <img
+            className="w-full h-10 rounded-full"
+            src="https://i.ibb.co/CVjTYfB/Screenshot-2024-06-01-123321.png"
+            alt=""
+          />
+          <span className="font-bold text-4xl">EstateElite</span>
+            </NavLink>
             </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content  z-50  shadow bg-base-100 rounded-box w-52 lg:hidden"
+            >
+              {navLinks}
+            </ul>
           </div>
+
+        
+      </div>
+      <div className="flex-none">
+
+       <div className="hidden lg:block">
+       {navLinks}
+       </div>
+
+
+        {user && (
+          <div className="dropdown dropdown-end z-50">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div title={user?.displayName} className="w-10 rounded-full">
+                <img
+                  referrerPolicy="no-referrer"
+                  alt="User Profile Photo"
+                  src={user?.photoURL}
+                />
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li className="mt-2">
+                <button
+                  onClick={logOut}
+                  className="bg-gray-200 block text-center"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
