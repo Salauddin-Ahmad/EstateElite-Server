@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 // import axios from "axios";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
+import useAxiosPublic from "../../../hook/useAxiosPublic";
+
 const Login = () => {
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
   const {  signIn, signInWithGoogle, user } = useContext(AuthContext);
@@ -31,6 +34,13 @@ const Login = () => {
       // 1. google sign in from firebase
       const result = await signInWithGoogle();
       console.log(result.user.email);
+
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName
+    }
+     const res = axiosPublic.post("/users", userInfo)
+     console.log(res);
 
       toast.success("Signin Successful");
       navigate(from, { replace: true });

@@ -3,61 +3,69 @@ import useAuth from "../hook/useAuth";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  const navLinks = <>
-          <ul className="menu menu-horizontal px-1">
-     <li>
-     <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-green-600 rounded-lg border[#58d4db77]  font-bold  "
-                  : "font-bold "
-              }
-            >
-              <span className="p-2 text-lg font-bold">Home</span>
-            </NavLink>
-     </li>
+  const navLinks = (
+    <>
+      <ul className="menu menu-horizontal px-1">
+        <li>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "text-green-600 rounded-lg border[#58d4db77]  font-bold  "
+                : "font-bold "
+            }
+          >
+            <span className="p-2 text-lg font-bold">Home</span>
+          </NavLink>
+        </li>
 
-          {!user && (
-            <li>
-              <NavLink to="/login">
-                <span className="p-1  text-lg font-bold">Login</span>
-              </NavLink>
-            </li>
-          )}
-        </ul>
-  </>
+        <li>
+          <NavLink
+            to="/allProperties"
+            className={({ isActive }) =>
+              isActive
+                ? "text-green-600 rounded-lg border[#58d4db77]  font-bold  "
+                : "font-bold "
+            }
+          >
+            <span className="p-2 text-lg font-bold">All Properties</span>
+          </NavLink>
+        </li>
+        
+        {!user && (
+          <li>
+            <NavLink to="/login">
+              <span className="p-1  text-lg font-bold">Login</span>
+            </NavLink>
+          </li>
+        )}
+      </ul>
+    </>
+  );
   return (
     <div className="navbar bg-[#FFFAE6] shadow-xl  mx-auto">
       <div className="flex-1">
-        
-      <div className="dropdown relative">
-            <div tabIndex={0} role="button" className="btn btn-ghost ">
+        <div className="dropdown relative">
+          <div tabIndex={0} role="button" className="btn btn-ghost ">
             <NavLink to="/" className="flex gap-2 items-center">
-            <img
-            className="w-full h-10 rounded-full"
-            src="https://i.ibb.co/CVjTYfB/Screenshot-2024-06-01-123321.png"
-            alt=""
-          />
-          <span className="font-bold text-4xl">EstateElite</span>
+              <img
+                className="w-full h-10 rounded-full"
+                src="https://i.ibb.co/CVjTYfB/Screenshot-2024-06-01-123321.png"
+                alt=""
+              />
+              <span className="font-bold text-4xl">EstateElite</span>
             </NavLink>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content  z-50  shadow bg-base-100 rounded-box w-52 lg:hidden"
-            >
-              {navLinks}
-            </ul>
           </div>
-
-        
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content  z-50  shadow bg-base-100 rounded-box w-52 lg:hidden"
+          >
+            {navLinks}
+          </ul>
+        </div>
       </div>
       <div className="flex-none">
-
-       <div className="hidden lg:block">
-       {navLinks}
-       </div>
-
+        <div className="hidden lg:block">{navLinks}</div>
 
         {user && (
           <div className="dropdown dropdown-end z-50">
