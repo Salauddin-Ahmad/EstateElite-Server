@@ -27,13 +27,58 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+
+    const userCollection = client.db("EstateElite").collection("users");
+
+
+        // jwt related api
+        app.post("/jwt", async (req, res) => {
+          const user = req.body;
+          const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: "1h",
+          });
+          res.send({ token });
+        });
+
+    // save the  user on db
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      // insert email if user doesn't exist
+      // you can do this many ways (1. email unique, 2. upsert
+      // 3. simple checking
+
+      const query = { email: user.email };
+      const existingUser = await userCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: "user already exists", insertedId: null });
+      }
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
