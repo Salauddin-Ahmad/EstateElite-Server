@@ -21,6 +21,19 @@ const Navbar = () => {
 
         <li>
           <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "text-green-600 rounded-lg border[#58d4db77]  font-bold  "
+                : "font-bold "
+            }
+          >
+            <span className="p-2 text-lg font-bold">Dashboard</span>
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
             to="/allProperties"
             className={({ isActive }) =>
               isActive
