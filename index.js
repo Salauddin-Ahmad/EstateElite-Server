@@ -3,8 +3,32 @@ const app = express();
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const multer = require('multer');
+const fs = require('fs');
 
 const port = process.env.PORT || 5000;
+
+
+// Ensure the uploads directory exists
+const uploadDir = 'uploads';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+
+
+// Set up Multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Directory where files will be saved
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Unique filename
+  }
+});
+
+// Initialize Multer with the storage configuration
+const upload = multer({ storage: storage });
 
 const corsOptions = {
   origin: ["http://localhost:5173", "http://localhost:5174"],
@@ -32,7 +56,9 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
+  // MARK: COLLECTION
     const userCollection = client.db("EstateElite").collection("users");
+    const propertyCollection = client.db("EstateElite").collection("Properties");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
@@ -107,6 +133,7 @@ async function run() {
     });
 
     // MARK:ADMIN
+
     // check if the user is admin or not
     app.get("/users/admin/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
@@ -147,7 +174,7 @@ async function run() {
       res.send(result);
     });
 
-    
+
     // MARK:Agent
     // set the agent
     app.patch("/users/agent/:id", verifyToken, async (req, res) => {
@@ -177,6 +204,35 @@ async function run() {
       }
       res.send({ agent });
     });
+    
+     // Add Property Route
+     app.post("/add-property", verifyToken, verifyAgent, upload.single('propertyImage'), async (req, res) => {
+      try {
+        const { title, location, priceRangeMin, priceRangeMax } = req.body;
+        const agentName = req.decoded.displayName;
+        const agentEmail = req.decoded.email;
+        const propertyImage = req.file ? req.file.path : '';
+
+        const newProperty = {
+          title,
+          location,
+          propertyImage,
+          agentName,
+          agentEmail,
+          priceRangeMin: parseFloat(priceRangeMin),
+          priceRangeMax: parseFloat(priceRangeMax),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+
+        const result = await propertyCollection.insertOne(newProperty);
+        res.status(201).json({ message: 'Property added successfully', propertyId: result.insertedId });
+      } catch (error) {
+        res.status(500).json({ message: 'Error adding property', error });
+      }
+    });
+
+
 
 
     // Send a ping to confirm a successful connection
