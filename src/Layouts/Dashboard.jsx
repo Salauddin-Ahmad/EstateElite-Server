@@ -130,7 +130,7 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/myProperties">
+                <NavLink to="/dashboard/addedProperty">
                   <FaHome />
                   My Added Properties
                 </NavLink>

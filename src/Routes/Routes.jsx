@@ -7,6 +7,7 @@ import SignUp from "../Compoents/Home/Credentials/SignUp";
 import Dashboard from "../Layouts/Dashboard";
 import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import AddProperty from "../Pages/Dashboard/Agent/AddProperties";
+import MyAddedProperties from "../Pages/Dashboard/Agent/MyAddedProperties";
 
 export const router = createBrowserRouter([
   {
@@ -40,11 +41,15 @@ export const router = createBrowserRouter([
          element:  <AllUsers></AllUsers>
       },
 
-      //MARK: Agents
+      //MARK: Agent route
       {
         path: "addProperty",
         element: <AddProperty></AddProperty>
-      }
+      },
+      {
+        path: "addedProperty",
+        element: <MyAddedProperties></MyAddedProperties>
+      },
    ],
   },
 ]);
