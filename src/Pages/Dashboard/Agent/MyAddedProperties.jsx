@@ -44,12 +44,18 @@ const MyAddedProperties = () => {
 
   return (
     <div>
-      <h2 className="text-3xl mb-4">My Added Properties: {properties.length}</h2>
+      <h2 className="text-3xl mb-4">
+        My Added Properties: {properties.length}
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {properties.map((property) => (
           <div key={property._id} className="card border space-y-1 rounded-md">
             {/* for getting image from multer (file upload for express) */}
-            <img src={property.propertyImage} alt={property.title} className="w-full h-44 object-cover" />
+            <img
+              src={property.propertyImage}
+              alt={property.title}
+              className="w-full h-44 object-cover"
+            />
             <div className="p-4">
               <h3 className="text-xl font-bold">{property.title}</h3>
               <p>Location: {property.location}</p>

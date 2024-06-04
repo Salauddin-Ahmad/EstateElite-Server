@@ -9,6 +9,7 @@ import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import AddProperty from "../Pages/Dashboard/Agent/AddProperties";
 import MyAddedProperties from "../Pages/Dashboard/Agent/MyAddedProperties";
 import UpdatePropertyForm from "../Pages/Dashboard/Agent/UpdatePropertyForm";
+import AdminHome from "../Pages/Dashboard/AdminHome/AdminHome";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
          path: "users",
          element:  <AllUsers></AllUsers>
       },
+      {
+        path: 'adminProfile',
+        element: <AdminHome></AdminHome>
+      },
 
       //MARK: Agent route
       {
@@ -48,7 +53,7 @@ export const router = createBrowserRouter([
         element: <AddProperty></AddProperty>
       },
       {
-        path: "addedProperty",
+        path: "myProperties",
         element: <MyAddedProperties></MyAddedProperties>
       },
       {
