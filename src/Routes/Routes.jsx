@@ -8,6 +8,7 @@ import Dashboard from "../Layouts/Dashboard";
 import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import AddProperty from "../Pages/Dashboard/Agent/AddProperties";
 import MyAddedProperties from "../Pages/Dashboard/Agent/MyAddedProperties";
+import UpdatePropertyForm from "../Pages/Dashboard/Agent/UpdatePropertyForm";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,11 @@ export const router = createBrowserRouter([
         path: "addedProperty",
         element: <MyAddedProperties></MyAddedProperties>
       },
+      {
+        path: "updateForm/:id",
+        element: <UpdatePropertyForm></UpdatePropertyForm>,
+        loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+      }
    ],
   },
 ]);

@@ -4,6 +4,7 @@ import useAxiosPublic from "../../../hook/useAxiosPublic";
 import useAuth from "../../../hook/useAuth";
 import useAxiosSecure from "../../../hook/useAxiosSecure";
 import Swal from "sweetalert2";
+import { imageUpload } from "../../../Compoents/Utils";
 
 const AddProperty = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,13 +16,17 @@ const AddProperty = () => {
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(5000000);
 
+  
   const handleSubmit = async (e) => {
-    e.preventDefault();
 
+    const image_url = await imageUpload(propertyImage);
+    console.log("Image URL:", image_url);
+    
+    e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
     formData.append("location", location);
-    formData.append("propertyImage", propertyImage);
+    formData.append("propertyImage", image_url);
     formData.append("agentName", user?.displayName);
     formData.append("agentImage", user?.photoURL)
     formData.append("agentEmail", user?.email);
@@ -30,6 +35,8 @@ const AddProperty = () => {
     formData.append("verificationStatus", "pending");
 
     try {
+      
+
       const response = await axiosSecure.post("/add-property", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -88,6 +95,7 @@ const AddProperty = () => {
           />
         </div>
         <div>
+
           <label
             htmlFor="propertyImage"
             className="block font-medium text-gray-700"
