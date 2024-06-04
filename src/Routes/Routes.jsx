@@ -6,6 +6,7 @@ import Login from "../Compoents/Home/Credentials/Login";
 import SignUp from "../Compoents/Home/Credentials/SignUp";
 import Dashboard from "../Layouts/Dashboard";
 import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
+import AddProperty from "../Pages/Dashboard/Agent/AddProperties";
 
 export const router = createBrowserRouter([
   {
@@ -32,11 +33,18 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
 
+    // MARK: Admin
     children: [
       {
          path: "users",
          element:  <AllUsers></AllUsers>
       },
+
+      //MARK: Agents
+      {
+        path: "addProperty",
+        element: <AddProperty></AddProperty>
+      }
    ],
   },
 ]);
