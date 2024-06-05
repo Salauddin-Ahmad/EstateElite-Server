@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
 import useAxiosPublic from "../../../hook/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const axiosPublic = useAxiosPublic();
@@ -42,11 +43,21 @@ const Login = () => {
      const res = axiosPublic.post("/users", userInfo)
      console.log(res);
 
-      toast.success("Signin Successful");
+     Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Login Successful!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
       navigate(from, { replace: true });
     } catch (err) {
       console.log(err);
-      toast.error(err?.message);
+      Swal.fire({
+        title: "Oops!",
+        text: "Login failed: " + err.message,
+        icon: "error",
+      });
     }
   };
 
@@ -56,9 +67,20 @@ const Login = () => {
       const result = await signIn(email, password);
       console.log(result)
       navigate(from, { replace: true });
-      toast.success("Signin Successful");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login Successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (err) {
-      toast.error(err?.message);
+      Swal.fire({
+        position: "top-end",
+        title: "Oops!",
+        text: "Login failed: " + err.message,
+        icon: "error",
+      });
     }
   };
 

@@ -1,5 +1,5 @@
-import useAdmin from "../../../hook/useAdmin";
-import useAuth from "../../../hook/useAuth";
+import useAdmin from "../../../../hook/useAdmin";
+import useAuth from "../../../../hook/useAuth";
 
 const AdminHome = () => {
   const { user } = useAuth();

@@ -5,11 +5,15 @@ import Error from "../Compoents/Error";
 import Login from "../Compoents/Home/Credentials/Login";
 import SignUp from "../Compoents/Home/Credentials/SignUp";
 import Dashboard from "../Layouts/Dashboard";
-import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import AddProperty from "../Pages/Dashboard/Agent/AddProperties";
 import MyAddedProperties from "../Pages/Dashboard/Agent/MyAddedProperties";
 import UpdatePropertyForm from "../Pages/Dashboard/Agent/UpdatePropertyForm";
-import AdminHome from "../Pages/Dashboard/AdminHome/AdminHome";
+import AdminHome from "../Pages/Dashboard/Admin/AdminHome/AdminHome";
+import ManageProperty from "../Pages/Dashboard/Admin/ManageProperty";
+import AllUsers from "../Pages/Dashboard/Admin/AllUsers/AllUsers";
+import MyProfile from "../Pages/Dashboard/UserPanel/MyProfile";
+import AllProperties from "../Compoents/AllProperties/AllProperties";
+import PropertyDetails from "../Compoents/AllProperties/PropertyDetails";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +33,15 @@ export const router = createBrowserRouter([
         path: "signup",
         element: <SignUp></SignUp>,
       },
+      {
+        path: "allProperties",
+        element: <AllProperties></AllProperties>
+      },
+      {
+        path: "property/:id",
+        element: <PropertyDetails></PropertyDetails>,
+        loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+      }
     ],
   },
   //  MARK: Dashboard
@@ -46,6 +59,10 @@ export const router = createBrowserRouter([
         path: 'adminProfile',
         element: <AdminHome></AdminHome>
       },
+      {
+        path: "manageProperties",
+        element: <ManageProperty></ManageProperty>
+      },
 
       //MARK: Agent route
       {
@@ -60,6 +77,13 @@ export const router = createBrowserRouter([
         path: "updateForm/:id",
         element: <UpdatePropertyForm></UpdatePropertyForm>,
         loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+      },
+
+
+      // MARK: USER related 
+      {
+        path: "userProfile",
+        element: <MyProfile></MyProfile>
       }
    ],
   },

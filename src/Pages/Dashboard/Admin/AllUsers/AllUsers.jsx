@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { FaTrashAlt, FaUsers, FaUserTie } from "react-icons/fa";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../../hook/useAxiosSecure";
+import useAxiosSecure from "../../../../hook/useAxiosSecure";
+
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -75,7 +76,7 @@ const AllUsers = () => {
     <div>
       <div className="flex justify-evenly my-4">
         <h2 className="text-3xl">All Users</h2>
-        <h2 className="text-3xl">Total Users {users.length}</h2>
+        <h2 className="text-3xl">Total Users: {users.length}</h2>
       </div>
 
       <div className="overflow-x-auto">
@@ -83,11 +84,11 @@ const AllUsers = () => {
           {/* head */}
           <thead>
             <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>User Role</th>
-              <th>Action</th>
+              <th className="text-2xl font-bold ">sl.</th>
+              <th className="text-2xl font-bold " >Name</th>
+              <th className="text-2xl font-bold " >Email</th>
+              <th className="text-2xl font-bold " >User Role</th>
+              <th className="text-2xl font-bold " >Action</th>
             </tr>
           </thead>
           <tbody>
