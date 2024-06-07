@@ -57,7 +57,7 @@ const ManageProperty = () => {
 
   return (
     <div>
-      <h2 className="text-center text-2xl">Manage Properties</h2>
+      <h2 className="text-center text-3xl font-bold mb-4">Manage Properties</h2>
       <table className="min-w-full bg-white">
         <thead>
           <tr>

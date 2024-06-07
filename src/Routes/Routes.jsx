@@ -14,6 +14,7 @@ import AllUsers from "../Pages/Dashboard/Admin/AllUsers/AllUsers";
 import MyProfile from "../Pages/Dashboard/UserPanel/MyProfile";
 import AllProperties from "../Compoents/AllProperties/AllProperties";
 import PropertyDetails from "../Compoents/AllProperties/PropertyDetails";
+import Wishlist from "../Pages/Dashboard/UserPanel/Wishlist";
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: "userProfile",
         element: <MyProfile></MyProfile>
+      },
+      {
+        path: "wishlist",
+        element: <Wishlist></Wishlist>
       }
    ],
   },
