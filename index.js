@@ -60,7 +60,11 @@ async function run() {
 
     // MARK: COLLECTION
     const userCollection = client.db("EstateElite").collection("users");
-    const propertyCollection = client.db("EstateElite").collection("Properties");
+    const propertyCollection = client
+      .db("EstateElite")
+      .collection("Properties");
+    const reviewCollection = client.db("EstateElite").collection("reviews");
+    const wishlistCollection = client.db("EstateElite").collection("wishlisted");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
@@ -68,7 +72,7 @@ async function run() {
 
       const tokenPayload = {
         email: user.email,
-        displayName: user.displayName // Ensure displayName is included
+        displayName: user.displayName, // Ensure displayName is included
       };
       const token = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "7d",
@@ -116,7 +120,43 @@ async function run() {
       next();
     };
 
-    // user related api
+    // MARK: User Related
+
+    // post reviews with property id for reference
+    app.post("/propertieReview", async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
+      console.log(result)
+      res.send(result);
+    })
+
+    // post wishlisted properties
+    app.post('/propertiesWishlist', async (req, res) => {
+      const wishlist = req.body;
+      const result = await wishlistCollection.insertOne(wishlist);
+    })
+
+    // get all wishlisted from collection
+    app.get("/wishlist", async (req, res) => {
+      const wishlist = await wishlistCollection.find().toArray();
+      res.send(wishlist);
+    });
+
+    // get the reviews matched by id for that specific property
+    app.get("/reviews/:id", async (req, res) => {
+      const propertyId = req.params.id;
+        const query = { propertyId: propertyId };
+        const reviews = await reviewCollection.find(query).toArray();
+        console.log(reviews)
+        res.send(reviews);
+    });
+    
+    
+
+
+
+
+    // get all users from db for showing
     app.get("/users", verifyToken, verifyAdmin, async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
@@ -138,7 +178,7 @@ async function run() {
       res.send(result);
     });
 
-    // MARK:ADMIN
+    // MARK:ADMIN rleated
 
     // check if the user is admin or not
     app.get("/users/admin/:email", verifyToken, async (req, res) => {
@@ -180,6 +220,32 @@ async function run() {
       res.send(result);
     });
 
+    // updating satuts with admin
+    app.patch(
+      "/updateStatus/:id",
+      verifyToken,
+      verifyAdmin,
+      async (req, res) => {
+        const id = req.params.id;
+        const { verificationStatus } = req.body;
+        console.log(
+          `Updating property ID: ${id} to status: ${verificationStatus}`
+        ); // Log data being received
+        const filter = { _id: new ObjectId(id) };
+        const update = { $set: { verificationStatus } };
+        const result = await propertyCollection.updateOne(filter, update);
+        console.log("Update result:", result);
+        if (result.modifiedCount === 1) {
+          res.send({ success: true, message: "Property status updated" });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Failed to update property status",
+          });
+        }
+      }
+    );
+
     // MARK:Agent
     // set the agent
     app.patch("/users/agent/:id", verifyToken, async (req, res) => {
@@ -196,20 +262,19 @@ async function run() {
 
     // Check if agent or not
     app.get("/users/agent/:email", verifyToken, async (req, res) => {
-        const email = req.params.email;
-        if (email !== req.decoded.email) {
-          return res.status(403).send({ message: "forbidden access" });
-        }
-
-        const query = { email: email };
-        const user = await userCollection.findOne(query);
-        let agent = false;
-        if (user) {
-          agent = user?.role === "agent";
-        }
-        res.send({ agent });
+      const email = req.params.email;
+      if (email !== req.decoded.email) {
+        return res.status(403).send({ message: "forbidden access" });
       }
-    );
+
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let agent = false;
+      if (user) {
+        agent = user?.role === "agent";
+      }
+      res.send({ agent });
+    });
 
     // Add Property || all commented codes are replaced with imgbb from multer
     app.post(
@@ -219,8 +284,16 @@ async function run() {
       // upload.single("propertyImage"),
       async (req, res) => {
         try {
-          const { title, location, priceRangeMin, priceRangeMax, verificationStatus, agentImage, image_url } = req.body;
-          const agentName = req.decoded.displayName;
+          const {
+            title,
+            location,
+            priceRangeMin,
+            priceRangeMax,
+            agentName,
+            verificationStatus,
+            agentImage,
+            propertyImage,
+          } = req.body;
           const agentEmail = req.decoded.email;
           // const propertyImage = req.file ? req.file.path : "";
           // const propertyImage = req.file ? `/uploads/${req.file.filename}` : "";
@@ -228,63 +301,73 @@ async function run() {
           const newProperty = {
             title,
             location,
-            image_url,
+            propertyImage,
             agentImage,
             verificationStatus,
             agentName,
             agentEmail,
             priceRangeMin: parseFloat(priceRangeMin),
             priceRangeMax: parseFloat(priceRangeMax),
-           
           };
 
           const result = await propertyCollection.insertOne(newProperty);
-          res.status(201).json({
-            message: "Property added successfully",
-            propertyId: result.insertedId,
-          });
+          res.send(result);
         } catch (error) {
           res.status(500).json({ message: "Error adding property", error });
         }
       }
     );
 
+    // delete properties
+    app.delete(
+      "/deleteProperty/:id",
+      verifyToken,
+      verifyAgent,
+      async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await propertyCollection.deleteOne(query);
+        res.send(result);
+      }
+    );
+
     // get all properties
-    app.get("/properties",verifyToken, async (req, res) => {
+    app.get("/properties", verifyToken, async (req, res) => {
       const result = await propertyCollection.find().toArray();
       res.send(result);
     });
 
-    // delete properties
-    app.delete("/deleteProperty/:id", verifyToken, verifyAgent, async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await propertyCollection.deleteOne(query);
+    // get all properties which is verified
+    app.get("/propertiesVerified", verifyToken, async (req, res) => {
+      const result = await propertyCollection
+        .find({ verificationStatus: "verified" })
+        .toArray();
       res.send(result);
     });
 
-
     // get one property by id
-    app.get("/propertie/:id", async (req, res) => {
+    app.get("/propertie/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await propertyCollection.findOne(query);
       res.send(result);
     });
 
-
     // update the propertie by id
-    app.patch("/updateProperty/:id", verifyToken, verifyAgent, async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const updatedDoc = {
-        $set: req.body,
-      };
-      const result = await propertyCollection.updateOne(filter, updatedDoc);
-      res.send(result);
-    });
-
-
+    app.patch(
+      "/updateProperty/:id",
+      verifyToken,
+      verifyAgent,
+      async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const updatedDoc = {
+          $set: req.body,
+        };
+        const result = await propertyCollection.updateOne(filter, updatedDoc);
+        res.send(result);
+      }
+    );
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
