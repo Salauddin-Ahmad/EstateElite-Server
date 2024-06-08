@@ -142,6 +142,18 @@ async function run() {
       res.send(wishlist);
     });
 
+    // get single wishlisted item by id
+    app.get("/wishlisted/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { propertieId: id };
+      const wishlist = await wishlistCollection.findOne(query);
+      console.log(wishlist)
+      res.send(wishlist);
+    });
+
+
+
     // get the reviews matched by id for that specific property
     app.get("/reviews/:id", async (req, res) => {
       const propertyId = req.params.id;
