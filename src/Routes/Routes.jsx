@@ -15,6 +15,8 @@ import MyProfile from "../Pages/Dashboard/UserPanel/MyProfile";
 import AllProperties from "../Compoents/AllProperties/AllProperties";
 import PropertyDetails from "../Compoents/AllProperties/PropertyDetails";
 import Wishlist from "../Pages/Dashboard/UserPanel/Wishlist";
+import OfferPage from "../Pages/Dashboard/UserPanel/OfferPage";
+import PropertyBought from "../Pages/Dashboard/UserPanel/PropertyBought";
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +91,14 @@ export const router = createBrowserRouter([
       {
         path: "wishlist",
         element: <Wishlist></Wishlist>
+      },
+      {
+        path: "offerPage/:id",
+        element: <OfferPage></OfferPage>,
+      },
+      {
+        path: "propertyBought",
+        element: <PropertyBought></PropertyBought>
       }
    ],
   },
