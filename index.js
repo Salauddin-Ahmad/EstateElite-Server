@@ -64,7 +64,10 @@ async function run() {
       .db("EstateElite")
       .collection("Properties");
     const reviewCollection = client.db("EstateElite").collection("reviews");
-    const wishlistCollection = client.db("EstateElite").collection("wishlisted");
+    const wishlistCollection = client
+      .db("EstateElite")
+      .collection("wishlisted");
+    const propertyBought = client.db("EstateElite").collection("bought");
 
     // jwt related api
     app.post("/jwt", async (req, res) => {
@@ -126,47 +129,135 @@ async function run() {
     app.post("/propertieReview", async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
-      console.log(result)
+      console.log(result);
       res.send(result);
-    })
+    });
 
     // post wishlisted properties
-    app.post('/propertiesWishlist', async (req, res) => {
-      const wishlist = req.body;
-      const result = await wishlistCollection.insertOne(wishlist);
-    })
+    app.post("/propertiesWishlist/:email", async (req, res) => {
+      try {
+        const wishlist = req.body;
+        const email = req.params.email;
+        const propertieId = wishlist.propertieId;
 
-    // get all wishlisted from collection
-    app.get("/wishlist", async (req, res) => {
-      const wishlist = await wishlistCollection.find().toArray();
+
+        console.log(propertieId)
+
+        const existingWishlistProperty = await wishlistCollection.findOne({
+          propertieId,
+          email,
+        });
+
+      
+        const existingBoughtProperty = await propertyBought.findOne({
+          propertieId,
+          email,
+        });
+
+        if (existingWishlistProperty || existingBoughtProperty) {
+          // Property already exists in one of the collections for this user
+          res.status(406).send({
+            message:
+              "This property is already in your wishlist or has been bought.",
+          });
+          return;
+        }
+
+        // Insert the new wishlist entry
+        const result = await wishlistCollection.insertOne(wishlist);
+        res.send(result);
+      } catch (error) {
+        res.status(500).send({ message: "Error adding to wishlist", error });
+      }
+    });
+
+    app.get("/wishlist/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const wishlist = await wishlistCollection.find(query).toArray();
       res.send(wishlist);
     });
 
     // get single wishlisted item by id
-    app.get("/wishlisted/:id", async (req, res) => {
+    app.get("/wishlisted/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { propertieId: id };
       const wishlist = await wishlistCollection.findOne(query);
-      console.log(wishlist)
+      // console.log(wishlist)
       res.send(wishlist);
     });
 
+    // delete wishlisted items with id
+    app.delete("/wishlisted/:id", verifyToken, async (req, res) => {
+      const id = req.params.id;
+      const query = { propertieId: id };
+      console.log(id);
+      console.log(query);
+      const result = await wishlistCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
+    // MARK:property bought
+
+    // post all the offered properties to propertyBought collection
+    app.post("/propertyOffers", async (req, res) => {
+      const bought = req.body;
+      const result = await propertyBought.insertOne(bought);
+      console.log(result);
+      res.send(result);
+    });
+
+    // get all the propertyBought
+    app.get("/propertyBought/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const bought = await propertyBought.find(query).toArray();
+      res.send(bought);
+    });
+
+
+
+    // get all the propertyBought for specific agent
+    app.patch('/requestedProp', async (req, res) => {
+      const { id, status } = req.body;
+    
+      try {
+        // Find the property with the given id
+        const property = await propertyBought.findById(id);
+    
+        if (!property) {
+          return res.status(404).json({ message: 'Property not found' });
+        }
+    
+        // Update the status of the specific property to 'accepted'
+        property.status = status;
+        await property.save();
+    
+        if (status === 'accepted') {
+          // Reject other properties with the same propertyId and different buyerEmail
+          await propertyBought.updateMany(
+            { _id: { $ne: id }, propertyId: property.propertyId, buyerEmail: { $ne: property.buyerEmail } },
+            { $set: { status: 'rejected' } }
+          );
+        }
+    
+        res.status(200).json({ message: 'Status updated successfully' });
+      } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error });
+      }
+    });
 
 
     // get the reviews matched by id for that specific property
     app.get("/reviews/:id", async (req, res) => {
       const propertyId = req.params.id;
-        const query = { propertyId: propertyId };
-        const reviews = await reviewCollection.find(query).toArray();
-        console.log(reviews)
-        res.send(reviews);
+      const query = { propertyId: propertyId };
+      const reviews = await reviewCollection.find(query).toArray();
+      console.log(reviews);
+      res.send(reviews);
     });
-    
-    
-
-
-
 
     // get all users from db for showing
     app.get("/users", verifyToken, verifyAdmin, async (req, res) => {
