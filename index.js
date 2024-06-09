@@ -212,33 +212,34 @@ async function run() {
     // get all the propertyBought
     app.get("/propertyBought/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = { email };
+      const query = { agentEmail: email };
       const bought = await propertyBought.find(query).toArray();
       res.send(bought);
     });
 
 
-
-    // get all the propertyBought for specific agent
+    // accepted rejected check 
     app.patch('/requestedProp', async (req, res) => {
-      const { id, status } = req.body;
-    
+      const { id, propertieId, status } = req.body;
       try {
-        // Find the property with the given id
-        const property = await propertyBought.findById(id);
+        // Find the property with the given id and propertieId
+        const property = await propertyBought.findOne({ Id: id, propertieId });
     
         if (!property) {
           return res.status(404).json({ message: 'Property not found' });
         }
     
-        // Update the status of the specific property to 'accepted'
-        property.status = status;
-        await property.save();
+        // Update the status of the specific property
+        await propertyBought.updateOne({ Id: id }, { $set: { status } });
+
     
         if (status === 'accepted') {
-          // Reject other properties with the same propertyId and different buyerEmail
+          // Reject other properties with the same propertieId and different buyerEmail
           await propertyBought.updateMany(
-            { _id: { $ne: id }, propertyId: property.propertyId, buyerEmail: { $ne: property.buyerEmail } },
+            {
+              propertieId: propertieId,
+              buyerEmail: { $ne: property.buyerEmail }
+            },
             { $set: { status: 'rejected' } }
           );
         }
@@ -248,6 +249,17 @@ async function run() {
         res.status(500).json({ message: 'An error occurred', error });
       }
     });
+
+
+
+
+
+
+
+
+
+
+
 
 
     // get the reviews matched by id for that specific property
