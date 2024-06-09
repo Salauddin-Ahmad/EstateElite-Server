@@ -47,14 +47,14 @@ const MyAddedProperties = () => {
       <h2 className="text-3xl mb-4">
         My Added Properties: {properties.length}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         {properties.map((property) => (
           <div key={property._id} className="card border space-y-1 rounded-md">
             {/* for getting image from multer (file upload for express) */}
             <img
               src={property.propertyImage}
               alt={property.title}
-              className="w-full h-44 object-cover"
+              className="w-full h-44 object-cover rounded-t-md"
             />
             <div className="p-4">
               <h3 className="text-xl font-bold">{property.title}</h3>
@@ -72,6 +72,7 @@ const MyAddedProperties = () => {
               </div>
               <p>{`Verification Status: ${property.verificationStatus}`}</p>
 
+              <div className="flex gap-4">
               {property.verificationStatus !== "rejected" && (
                 <Link to={`/dashboard/updateForm/${property._id}`}>
                   <button className="btn btn-primary mt-2">Update</button>
@@ -79,10 +80,11 @@ const MyAddedProperties = () => {
               )}
               <button
                 onClick={() => handleDelete(property._id)}
-                className="btn btn-danger mt-2"
+                className="btn bg-red-600 text-white mt-2"
               >
                 Delete
               </button>
+              </div>
             </div>
           </div>
         ))}

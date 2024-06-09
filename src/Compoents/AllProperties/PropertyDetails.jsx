@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import useAxiosSecure from "../../hook/useAxiosSecure";
@@ -8,11 +8,12 @@ import useAuth from "../../hook/useAuth";
 import Swal from "sweetalert2";
 
 const PropertyDetails = () => {
-  const [isAdmin] = useAdmin();
-  const [isAgent] = useAgent();
+  // const [isAdmin] = useAdmin();
+  // const [isAgent] = useAgent();
 
   const [review, setReview] = useState("");
-  const { user } = useAuth();
+  const { user, isLoading: userLoading } = useAuth();
+  // console.log(user?.email)
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -29,9 +30,10 @@ const PropertyDetails = () => {
   // Post propertie details to wishlisted collection
   const addToWishlistMutation = useMutation({
     mutationFn: async () => {
-      const res = await axiosSecure.post("/propertiesWishlist", { 
+      const res = await axiosSecure.post(`/propertiesWishlist/${user?.email}`, { 
         propertie,
         propertieId: id,
+        email: user?.email,
         status: "pending"
       });
       return res.data;
@@ -45,12 +47,22 @@ const PropertyDetails = () => {
       });
     },
     onError: (error) => {
-      Swal.fire({
-        title: "Oops...",
-        text: "Error! " + error.message,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      const status = error.response?.status;
+      if (status === 406){
+        Swal.fire({
+          title: "Oops...",
+          text: "You have already added this property to your wishlist or bought it.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          title: "Oops...",
+          text: "Error! " + error.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
     }
   });
 
@@ -71,12 +83,6 @@ const PropertyDetails = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews", id]); // Refetch reviews after a new review is added
-      Swal.fire({
-        title: "Success!",
-        text: "Your review has been submitted.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
       setReview("");
     },
     onError: (error) => {
@@ -112,6 +118,7 @@ const PropertyDetails = () => {
   if (propertyError || reviewsError) {
     return <div>Error loading data</div>;
   }
+
 
   return (
     <>

@@ -17,6 +17,9 @@ import PropertyDetails from "../Compoents/AllProperties/PropertyDetails";
 import Wishlist from "../Pages/Dashboard/UserPanel/Wishlist";
 import OfferPage from "../Pages/Dashboard/UserPanel/OfferPage";
 import PropertyBought from "../Pages/Dashboard/UserPanel/PropertyBought";
+import RequestedProperty from "../Pages/Dashboard/Agent/RequestedProperty";
+import AgentProfile from "../Pages/Dashboard/Agent/AgentProfile";
+import MyReviews from "../Pages/Dashboard/UserPanel/MyReviews";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +72,11 @@ export const router = createBrowserRouter([
 
       //MARK: Agent route
       {
+        path: 'agentProfile',
+        element: <AgentProfile></AgentProfile>
+      }
+      ,
+      {
         path: "addProperty",
         element: <AddProperty></AddProperty>
       },
@@ -80,6 +88,10 @@ export const router = createBrowserRouter([
         path: "updateForm/:id",
         element: <UpdatePropertyForm></UpdatePropertyForm>,
         loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+      },
+      {
+        path: 'requestedProperties',
+        element: <RequestedProperty></RequestedProperty>
       },
 
 
@@ -99,7 +111,11 @@ export const router = createBrowserRouter([
       {
         path: "propertyBought",
         element: <PropertyBought></PropertyBought>
-      }
+      },
+      {
+        path: 'myReviews',
+        element: <MyReviews></MyReviews>
+      },
    ],
   },
 ]);

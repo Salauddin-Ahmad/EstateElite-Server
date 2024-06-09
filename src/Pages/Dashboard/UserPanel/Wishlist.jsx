@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hook/useAxiosSecure";
 import { Link } from "react-router-dom";
+import useAuth from "../../../hook/useAuth";
 
 const Wishlist = () => {
+  const {user} = useAuth()
   const axiosSecure = useAxiosSecure();
 
   const { data: wishlisted } = useQuery({
     queryKey: "wishlist",
     queryFn: async () => {
-      const res = await axiosSecure.get("/wishlist");
+      const res = await axiosSecure.get(`/wishlist/${user.email}`);
       console.log(res.data);
       return res.data;
     },

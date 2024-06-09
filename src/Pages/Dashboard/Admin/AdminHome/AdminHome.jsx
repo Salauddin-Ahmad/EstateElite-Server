@@ -28,7 +28,8 @@ const AdminHome = () => {
           <span>Hi, Welcome </span>
           {user.displayName ? user.displayName : "Back"}
         </h2>
-        <h2 className="text-2xl my-2">Role: Adminstrator</h2>
+        <h2 className="text-2xl my-2">Role: {isAdmin ? 'Admin' : ' Not an Admin'}</h2>
+
       </div>
 
       <div className="flex justify-center ">
