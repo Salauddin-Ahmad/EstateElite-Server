@@ -57,16 +57,15 @@ const ManageProperty = () => {
 
   return (
     <div>
-      <h2 className="text-center text-3xl font-bold mb-4">Manage Properties</h2>
       <table className="min-w-full bg-white">
         <thead>
-          <tr>
-            <th className="w-1/6 py-2">Property Title</th>
-            <th className="w-1/6 py-2">Property Location</th>
-            <th className="w-1/6 py-2">Agent Name</th>
-            <th className="w-1/6 py-2">Agent Email</th>
-            <th className="w-1/6 py-2">Price Range</th>
-            <th className="w-1/6 py-2">Actions</th>
+          <tr className=' rounded-t border '>
+            <th className="w-1/6 py-2 border border-slate-400">Property Title</th>
+            <th className="w-1/6 py-2 border border-slate-400">Property Location</th>
+            <th className="w-1/6 py-2 border border-slate-400">Agent Name</th>
+            <th className="w-1/6 py-2 border border-slate-400">Agent Email</th>
+            <th className="w-1/6 py-2 border border-slate-400">Price Range</th>
+            <th className="w-1/6 py-2 border border-slate-400">Actions</th>
           </tr>
         </thead>
         <tbody>

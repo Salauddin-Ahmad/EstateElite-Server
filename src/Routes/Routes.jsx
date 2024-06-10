@@ -20,6 +20,7 @@ import PropertyBought from "../Pages/Dashboard/UserPanel/PropertyBought";
 import RequestedProperty from "../Pages/Dashboard/Agent/RequestedProperty";
 import AgentProfile from "../Pages/Dashboard/Agent/AgentProfile";
 import MyReviews from "../Pages/Dashboard/UserPanel/MyReviews";
+import MangeReviews from "../Pages/Dashboard/Admin/MangeReviews";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +48,8 @@ export const router = createBrowserRouter([
         path: "property/:id",
         element: <PropertyDetails></PropertyDetails>,
         loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
-      }
+      },
+    
     ],
   },
   //  MARK: Dashboard
@@ -68,6 +70,10 @@ export const router = createBrowserRouter([
       {
         path: "manageProperties",
         element: <ManageProperty></ManageProperty>
+      },
+      {
+        path: 'reviews',
+        element: <MangeReviews></MangeReviews>
       },
 
       //MARK: Agent route

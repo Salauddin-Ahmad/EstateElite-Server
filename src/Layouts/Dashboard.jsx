@@ -8,8 +8,15 @@ const Dashboard = () => {
   const [isAdmin] = useAdmin();
   const [isAgent] = useAgent();
   return (
-    <div className="flex">
-      <div className="w-64 min-h-screen bg-orange-200">
+<>
+<div className="w-full h-16 bg-slate-500 " >
+ <p className="flex items-center justify-center text-gray-300 text-2xl pt-3"> {isAdmin && "Administrator Dashboard"}</p>
+</div>
+
+
+
+<div className="flex">
+      <div className="w-64 min-h-screen bg-slate-200">
         <ul className="menu p-4">
           {isAdmin ? (
             <>
@@ -113,6 +120,7 @@ const Dashboard = () => {
         <Outlet />
       </div>
     </div>
+</>
   );
 };
 

@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react'
 
 import {
   GoogleAuthProvider,
+  TwitterAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -19,6 +20,7 @@ export const AuthContext = createContext(null)
 
 
 const googleProvider = new GoogleAuthProvider()
+const twitterProvider = new TwitterAuthProvider()
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
@@ -37,6 +39,10 @@ const AuthProvider = ({ children }) => {
   const signInWithGoogle = () => {
     setLoading(true)
     return signInWithPopup(auth, googleProvider)
+  }
+  const signInWithTwitter = () => {
+    setLoading(true)
+    return signInWithPopup(auth, twitterProvider)
   }
 
 //   const resetPassword = email => {
@@ -93,7 +99,8 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
-    setUser
+    setUser,
+    signInWithTwitter
   }
 
   return (

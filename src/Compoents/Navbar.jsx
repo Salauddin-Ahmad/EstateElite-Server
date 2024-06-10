@@ -56,13 +56,13 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar bg-[#FFFAE6] shadow-xl  mx-auto">
+    <div className="navbar  bg-slate-200 shadow-xl  mx-auto">
       <div className="flex-1">
         <div className="dropdown relative">
           <div tabIndex={0} role="button" className="btn btn-ghost ">
             <NavLink to="/" className="flex gap-2 items-center">
               <img
-                className="w-full h-10 rounded-full"
+                className="w-full h-12 rounded-full border-4 border-gray-400"
                 src="https://i.ibb.co/CVjTYfB/Screenshot-2024-06-01-123321.png"
                 alt=""
               />

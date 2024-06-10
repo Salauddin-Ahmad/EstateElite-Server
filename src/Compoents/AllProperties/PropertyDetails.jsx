@@ -101,6 +101,9 @@ const PropertyDetails = () => {
       name: user?.displayName,
       email: user?.email,
       photo: user?.photoURL || user?.photoUrl,
+      title: propertie.title,
+      agentName: propertie.agentName,
+      reviewTime: new Date().toISOString(),
       review,
       propertyId: id,
     };

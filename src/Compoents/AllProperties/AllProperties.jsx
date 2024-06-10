@@ -24,7 +24,7 @@ const AllProperties = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
             {properties.map((property) => (
-                <div key={property.id} className="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div key={property.id} className="bg-slate-100 border-2 border-slate-300 shadow-lg rounded-lg overflow-hidden">
                     <img src={property.propertyImage} alt={property.title} className="w-full h-48 object-cover"/>
                     <div className="p-4">
                         <h3 className="text-xl font-semibold mb-2">{property.title}</h3>
