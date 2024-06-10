@@ -34,6 +34,7 @@ const port = process.env.PORT || 5000;
 
 const corsOptions = {
   origin: [
+    "*",
     "http://localhost:5173",
     "http://localhost:5174",
     "https://estateelite-fdfad.web.app",
@@ -239,7 +240,7 @@ async function run() {
     // get all the propertyBought
     app.get("/propertyBought/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = { buyerEmail: email };
+      const query = { agentEmail: email };
       const bought = await propertyBought.find(query).toArray();
       res.send(bought);
     });
@@ -280,6 +281,14 @@ async function run() {
       const result = await userCollection.find().toArray();
       res.send(result);
     });
+
+
+      // get a user info by email from db
+      app.get('/user/:email', async (req, res) => {
+        const email = req.params.email
+        const result = await userCollection.findOne({ email })
+        res.send(result)
+      })
 
     // save the  user on db
     app.post("/users", async (req, res) => {
@@ -392,6 +401,22 @@ async function run() {
       } catch (error) {
         console.error("Error updating property", error);
         res.status(500).send({ message: "Internal server error" });
+      }
+    });
+
+    // Get route to fetch advertised properties by advertiser email
+    app.get("/advertised/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log(email)
+      try {
+        const properties = await propertyCollection
+          .find({ "advertiserEmail" : email  , "advertisement" : "true" })
+          .toArray();
+        res.send(properties);
+        console.log(properties)
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        res.status(500).send({ message: "Internal Server Error" });
       }
     });
 
