@@ -98,4 +98,8 @@ Welcome to EstateElite, a real estate platform designed to streamline the buying
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
+<<<<<<< HEAD
 5. Open a pull request.
+=======
+5. Open a pull request.
+>>>>>>> da116760ec0f4fc11589f006e2cde9eccdbc5a46
