@@ -34,7 +34,6 @@ Welcome to EstateElite, a real estate platform designed to streamline the buying
   - Roles: Admin, Agent, and User.
   - Admin can promote users to admin or agent.
 
-- **Property Management**:
   - Agents can add properties.
   - Admin verifies properties before they are listed.
 
@@ -100,7 +99,3 @@ Welcome to EstateElite, a real estate platform designed to streamline the buying
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request.
-
----
-
-Thank you for using EstateElite! We hope you have a great experience. If you encounter any issues or have suggestions, please feel free to reach out.
