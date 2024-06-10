@@ -33,7 +33,11 @@ const port = process.env.PORT || 5000;
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://estateelite-fdfad.web.app",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -133,6 +137,31 @@ async function run() {
       res.send(result);
     });
 
+    // MARK:REVIEWS
+    // get the reviews matched by id for that specific property
+    app.get("/reviews/:id", async (req, res) => {
+      const propertyId = req.params.id;
+      const query = { propertyId: propertyId };
+      const reviews = await reviewCollection.find(query).toArray();
+      console.log(reviews);
+      res.send(reviews);
+    });
+
+    app.get("/allReviews/:email", async (req, res) => {
+      const email = req.params.email;
+      const reviews = await reviewCollection.find({ email: email }).toArray();
+      res.send(reviews);
+    });
+
+    // delete single review by Id
+    app.delete("/deleteReviews/:id", async (req, res) => {
+      const reviewId = req.params.id;
+      const query = { _id: new ObjectId(reviewId) };
+      const result = await reviewCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
     // post wishlisted properties
     app.post("/propertiesWishlist/:email", async (req, res) => {
       try {
@@ -140,15 +169,13 @@ async function run() {
         const email = req.params.email;
         const propertieId = wishlist.propertieId;
 
-
-        console.log(propertieId)
+        console.log(propertieId);
 
         const existingWishlistProperty = await wishlistCollection.findOne({
           propertieId,
           email,
         });
 
-      
         const existingBoughtProperty = await propertyBought.findOne({
           propertieId,
           email,
@@ -212,63 +239,40 @@ async function run() {
     // get all the propertyBought
     app.get("/propertyBought/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = { agentEmail: email };
+      const query = { buyerEmail: email };
       const bought = await propertyBought.find(query).toArray();
       res.send(bought);
     });
 
-
-    // accepted rejected check 
-    app.patch('/requestedProp', async (req, res) => {
+    // accepted rejected check
+    app.patch("/requestedProp", async (req, res) => {
       const { id, propertieId, status } = req.body;
       try {
         // Find the property with the given id and propertieId
         const property = await propertyBought.findOne({ Id: id, propertieId });
-    
+
         if (!property) {
-          return res.status(404).json({ message: 'Property not found' });
+          return res.status(404).json({ message: "Property not found" });
         }
-    
+
         // Update the status of the specific property
         await propertyBought.updateOne({ Id: id }, { $set: { status } });
 
-    
-        if (status === 'accepted') {
+        if (status === "accepted") {
           // Reject other properties with the same propertieId and different buyerEmail
           await propertyBought.updateMany(
             {
               propertieId: propertieId,
-              buyerEmail: { $ne: property.buyerEmail }
+              buyerEmail: { $ne: property.buyerEmail },
             },
-            { $set: { status: 'rejected' } }
+            { $set: { status: "rejected" } }
           );
         }
-    
-        res.status(200).json({ message: 'Status updated successfully' });
+
+        res.status(200).json({ message: "Status updated successfully" });
       } catch (error) {
-        res.status(500).json({ message: 'An error occurred', error });
+        res.status(500).json({ message: "An error occurred", error });
       }
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // get the reviews matched by id for that specific property
-    app.get("/reviews/:id", async (req, res) => {
-      const propertyId = req.params.id;
-      const query = { propertyId: propertyId };
-      const reviews = await reviewCollection.find(query).toArray();
-      console.log(reviews);
-      res.send(reviews);
     });
 
     // get all users from db for showing
@@ -360,6 +364,36 @@ async function run() {
         }
       }
     );
+
+    // get all the reviews
+    app.get("/reviewsAll", async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
+    });
+
+    // Patch route to update a property by _id for advertisement
+    app.patch("/properties/:id", async (req, res) => {
+      const { id } = req.params;
+      const updateData = req.body;
+
+      try {
+        // Find the property by _id and update it with new values from req.body
+        const result = await propertyCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+          return res.status(404).send({ message: "Property not found" });
+        }
+        res
+          .status(200)
+          .send({ message: "Property updated successfully", result });
+      } catch (error) {
+        console.error("Error updating property", error);
+        res.status(500).send({ message: "Internal server error" });
+      }
+    });
 
     // MARK:Agent
     // set the agent
