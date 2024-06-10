@@ -39,7 +39,7 @@ const MyAddedProperties = () => {
     return <div>Error loading properties</div>;
   }
   // multer
-  // const backendUrl = "http://localhost:5000";
+  // const backendUrl = "https://estate-elite-server.vercel.app";
   //   src={`${backendUrl}${property.propertyImage}`}
 
   return (

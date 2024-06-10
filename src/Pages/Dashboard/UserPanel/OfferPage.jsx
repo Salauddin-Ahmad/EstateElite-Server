@@ -27,13 +27,12 @@ const OfferPage = () => {
   });
 
   // State for holding max price and min price
-  const [minPrice, setMinPrice] = useState();
-  const [maxPrice, setMaxPrice] = useState();
+  const [minPrice, setOfferprice] = useState();
+
 
   useEffect(() => {
     if (property) {
-      setMinPrice(property.propertie.priceRangeMin);
-      setMaxPrice(property.propertie.priceRangeMax);
+      setOfferprice(property.propertie.priceRangeMin);
     }
   }, [property]);
 
@@ -81,7 +80,7 @@ const OfferPage = () => {
     e.preventDefault();
     if (
      minPrice < property?.propertie?.priceRangeMin ||
-      maxPrice > property?.propertie?.priceRangeMax
+     minPrice > property?.propertie?.priceRangeMax
     ) {
       Swal.fire({
         title: "Error",
@@ -101,8 +100,7 @@ const OfferPage = () => {
       agentImage: property?.propertie?.agentImage,
       agentName: property?.propertie?.agentName,
       agentEmail: property?.propertie?.agentEmail,
-      offeredMin: minPrice,
-      offeredMax: maxPrice,
+      offeredPrice: parseInt(minPrice, 10),
       buyerEmail: user?.email,
       buyerName: user?.displayName,
       status: "pending",
@@ -181,20 +179,25 @@ const OfferPage = () => {
           />
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Agent Specified price
+          </label>
+          <div className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+            {property?.propertie?.priceRangeMin} - {property?.propertie?.priceRangeMax}
+            
+            
+          
+            </div>
+        </div>
+
         <label htmlFor="offer-price">Offer Price</label>
         <div className="flex gap-2 mt-1 w-full border border-gray-300 rounded-md shadow-sm p-2">
           <input
             type="number"
             defaultValue={property?.propertie?.priceRangeMin}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="w-1/2 p-2 border border-gray-300 rounded-l-md"
-          />
-          <span className="self-center"> - </span>
-          <input
-            type="number"
-            defaultValue={property?.propertie?.priceRangeMax}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-1/2 p-2 border border-gray-300 rounded-r-md"
+            onChange={(e) => setOfferprice(e.target.value)}
+            className="w-1/2 p-2  rounded-l-md"
           />
         </div>
 

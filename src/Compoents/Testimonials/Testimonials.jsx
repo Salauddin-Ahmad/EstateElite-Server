@@ -109,6 +109,9 @@ const Testimonials = () => {
 
   return (
 <>
+<div>
+    <h1 className='text-3xl font-extrabold font-sans text-center'>User Reviews</h1>
+</div>
 <div className="relative w-full h-full">
       <Swiper
         modules={[Parallax, Pagination, Navigation]}

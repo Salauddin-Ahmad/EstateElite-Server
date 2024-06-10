@@ -21,6 +21,8 @@ import RequestedProperty from "../Pages/Dashboard/Agent/RequestedProperty";
 import AgentProfile from "../Pages/Dashboard/Agent/AgentProfile";
 import MyReviews from "../Pages/Dashboard/UserPanel/MyReviews";
 import MangeReviews from "../Pages/Dashboard/Admin/MangeReviews";
+import PayForm from "../Pages/Dashboard/UserPanel/Payments/PayForm";
+import AdvertiseProperty from "../Pages/Dashboard/Admin/Advertise/AdvertiseProperty";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +49,7 @@ export const router = createBrowserRouter([
       {
         path: "property/:id",
         element: <PropertyDetails></PropertyDetails>,
-        loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+        loader: ({params}) => fetch(`https://estate-elite-server.vercel.app/propertie/${params.id}`)
       },
     
     ],
@@ -75,6 +77,10 @@ export const router = createBrowserRouter([
         path: 'reviews',
         element: <MangeReviews></MangeReviews>
       },
+      {
+        path: 'advertise',
+        element: <AdvertiseProperty></AdvertiseProperty>
+      },
 
       //MARK: Agent route
       {
@@ -93,7 +99,7 @@ export const router = createBrowserRouter([
       {
         path: "updateForm/:id",
         element: <UpdatePropertyForm></UpdatePropertyForm>,
-        loader: ({params}) => fetch(`http://localhost:5000/propertie/${params.id}`)
+        loader: ({params}) => fetch(`https://estate-elite-server.vercel.app/propertie/${params.id}`)
       },
       {
         path: 'requestedProperties',
@@ -122,6 +128,10 @@ export const router = createBrowserRouter([
         path: 'myReviews',
         element: <MyReviews></MyReviews>
       },
+      {
+        path: 'payform',
+        element: <PayForm></PayForm>
+      }
    ],
   },
 ]);

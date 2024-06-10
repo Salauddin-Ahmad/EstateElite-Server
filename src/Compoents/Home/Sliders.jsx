@@ -5,12 +5,7 @@ import "swiper/swiper-bundle.css";
 const Sliders = () => {
   return (
     <div className="mb-5">
-<h1 className="lg:text-3xl text-center pt-8 font- font-bold">
-Discover your perfect place on earth with the help of our experienced experts.
-</h1>
-      <p className="w-[90%] mx-auto mt-3 ">
-      Welcome to EstateElite, your premier destination for luxury real estate. Explore our exclusive listings and find your dream home today. Our experts are ready to help you find your dream home. Your perfect home is just a click away!
-      </p>
+
 
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, Autoplay]}

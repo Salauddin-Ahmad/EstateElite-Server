@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hook/useAxiosSecure";
 import useAuth from "../../../hook/useAuth";
+import { Link } from "react-router-dom";
 
 const PropertyBought = () => {
   const { user } = useAuth();
@@ -33,10 +34,17 @@ const PropertyBought = () => {
             <h2 className="text-xl font-semibold mb-2">{property.propertyTitle}</h2>
             <p className="text-gray-600 mb-2">Location: {property.propertyLocation}</p>
             <p className="text-gray-600 mb-2">Agent: {property.agentName}</p>
-            <p className="text-gray-600 mb-2">Offered Amount: ${property.offeredMin} - ${property.offeredMax}</p>
+            <p className="text-gray-600 mb-2">Offered Amount: ${property.offeredPrice}</p>
             <p className={`font-semibold ${property.status === 'pending' ? 'text-yellow-500' : property.status === 'accepted' ? 'text-green-500' : 'text-red-500'}`}>
               Status: {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
             </p>
+            
+           <Link to={`/dashboard/payform/$`}>
+           {
+            property.status === 'accepted' && <button className="btn bg-blue-600 px-6 text-white">Pay</button>
+           }
+           </Link>
+           
            </div>
           </div>
         ))}

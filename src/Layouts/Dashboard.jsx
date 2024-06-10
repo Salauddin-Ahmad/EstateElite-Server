@@ -5,14 +5,29 @@ import useAgent from "../hook/useAgent";
 // import useAuth from "../hook/useAuth";
 
 const Dashboard = () => {
-  const [isAdmin] = useAdmin();
-  const [isAgent] = useAgent();
-  return (
-<>
-<div className="w-full h-16 bg-slate-500 " >
- <p className="flex items-center justify-center text-gray-300 text-2xl pt-3"> {isAdmin && "Administrator Dashboard"}</p>
-</div>
+  const [isAdmin, isAdminLoading] = useAdmin();
+  const [isAgent, isAgentLoading] = useAgent();
 
+  if (isAdminLoading || isAdminLoading ) {
+    return <>
+    <div className="flex justify-center items-center pt-28" >
+    <div className="  w-16 h-16 border-8 border-dashed rounded-full animate-spin border-blue-600"></div>
+    </div>
+    </>
+  }
+
+
+
+return (
+<>
+
+{/* dynamic banner for giving dashboard title */}
+{!isAdmin && !isAgent ? <div className="w-full h-16 bg-slate-500 " >
+ <p className="flex items-center justify-center text-gray-300 text-2xl pt-3"> 
+  User Dashboard </p>
+</div>  : <div className="w-full h-16 bg-slate-500 " >
+ <p className="flex items-center justify-center text-gray-300 text-2xl pt-3"> {isAdmin && "Administrator Dashboard"} {isAgent && "Agent Dashboard"} </p>
+</div> }
 
 
 <div className="flex">
@@ -42,6 +57,12 @@ const Dashboard = () => {
                 <NavLink to="/dashboard/reviews">
                   <FaHome />
                   Manage Reviews
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/advertise">
+                  <FaHome />
+                  Adveritse Property
                 </NavLink>
               </li>
             </>
