@@ -405,12 +405,11 @@ async function run() {
     });
 
     // Get route to fetch advertised properties by advertiser email
-    app.get("/advertised/:email", async (req, res) => {
-      const email = req.params.email;
-      console.log(email)
+    app.get("/advertised", async (req, res) => {
       try {
         const properties = await propertyCollection
-          .find({ "advertiserEmail" : email  , "advertisement" : "true" })
+          .find({"advertisement" : "true" })
+          .limit(9)
           .toArray();
         res.send(properties);
         console.log(properties)
