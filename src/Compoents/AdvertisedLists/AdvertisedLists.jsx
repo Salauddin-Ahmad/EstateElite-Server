@@ -8,9 +8,9 @@ const AdvertisedLists = () => {
   const { user } = useAuth();
 
   const { data: properties, isLoading, error } = useQuery({
-    queryKey: ['advertised', user?.email],
+    queryKey: ['advertised'],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/advertised/${user?.email}`);
+      const res = await axiosSecure.get(`/advertised`);
       console.log(res.data)
       return res.data;
     },

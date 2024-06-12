@@ -23,6 +23,8 @@ import MyReviews from "../Pages/Dashboard/UserPanel/MyReviews";
 import MangeReviews from "../Pages/Dashboard/Admin/MangeReviews";
 import PayForm from "../Pages/Dashboard/UserPanel/Payments/PayForm";
 import AdvertiseProperty from "../Pages/Dashboard/Admin/Advertise/AdvertiseProperty";
+import AdminRoute from "./AdminRoute";
+import AgentRoutes from "./AgentRoutes";
 
 export const router = createBrowserRouter([
   {
@@ -63,42 +65,60 @@ export const router = createBrowserRouter([
     children: [
       {
          path: "users",
-         element:  <AllUsers></AllUsers>
+         element: <AdminRoute>
+           <AllUsers></AllUsers>
+         </AdminRoute>
       },
       {
         path: 'adminProfile',
-        element: <AdminHome></AdminHome>
+        element: <AdminRoute>
+          <AdminHome></AdminHome>
+        </AdminRoute>
       },
       {
         path: "manageProperties",
-        element: <ManageProperty></ManageProperty>
+        element: <AdminRoute>
+          <ManageProperty></ManageProperty>
+        </AdminRoute>
       },
       {
         path: 'reviews',
-        element: <MangeReviews></MangeReviews>
+        element: <AdminRoute>
+          <MangeReviews></MangeReviews>
+        </AdminRoute>
       },
       {
         path: 'advertise',
-        element: <AdvertiseProperty></AdvertiseProperty>
+        element: <AdminRoute>
+          <AdvertiseProperty></AdvertiseProperty>
+        </AdminRoute>
       },
 
       //MARK: Agent route
       {
         path: 'agentProfile',
-        element: <AgentProfile></AgentProfile>
+        element: <AgentRoutes>
+          <AgentProfile></AgentProfile>
+        </AgentRoutes>
       }
       ,
       {
         path: "addProperty",
-        element: <AddProperty></AddProperty>
+        element: <AgentRoutes>
+          <AddProperty></AddProperty>
+        </AgentRoutes>
       },
       {
         path: "myProperties",
-        element: <MyAddedProperties></MyAddedProperties>
+        element: <AgentRoutes>
+          <MyAddedProperties></MyAddedProperties>
+        </AgentRoutes>
       },
       {
         path: "updateForm/:id",
-        element: <UpdatePropertyForm></UpdatePropertyForm>,
+        element: <AgentRoutes>
+          <UpdatePropertyForm></UpdatePropertyForm>
+        </AgentRoutes>,
         loader: ({params}) => fetch(`https://estate-elite-server.vercel.app/propertie/${params.id}`)
       },
       {

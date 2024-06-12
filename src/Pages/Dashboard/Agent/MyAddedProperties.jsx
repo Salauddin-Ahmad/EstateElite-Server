@@ -47,9 +47,9 @@ const MyAddedProperties = () => {
       <h2 className="text-3xl mb-4">
         My Added Properties: {properties.length}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 ">
         {properties.map((property) => (
-          <div key={property._id} className="card border space-y-1 rounded-md">
+          <div key={property._id} className="card bg-slate-100 border space-y-1 rounded-md">
             {/* for getting image from multer (file upload for express) */}
             <img
               src={property.propertyImage}
