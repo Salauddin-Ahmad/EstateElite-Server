@@ -202,8 +202,9 @@ async function run() {
     app.get("/wishlist/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const wishlist = await wishlistCollection.find(query).toArray();
-      res.send(wishlist);
+      const wishlists = await wishlistCollection.find(query).toArray();
+      console.log(wishlists)
+      res.send(wishlists);
     });
 
     // get single wishlisted item by id
@@ -240,8 +241,9 @@ async function run() {
     // get all the propertyBought
     app.get("/propertyBought/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = { agentEmail: email };
+      const query = { email };
       const bought = await propertyBought.find(query).toArray();
+      console.log(bought)
       res.send(bought);
     });
 
@@ -297,7 +299,7 @@ async function run() {
       // you can do this many ways (1. email unique, 2. upsert
       // 3. simple checking
 
-      const query = { email: user.email };
+      const query = { emails: user.email };
       const existingUser = await userCollection.findOne(query);
       if (existingUser) {
         return res.send({ message: "user already exists", insertedId: null });
@@ -511,7 +513,7 @@ async function run() {
     });
 
     // get all properties which is verified
-    app.get("/propertiesVerified", verifyToken, async (req, res) => {
+    app.get("/propertiesVerified",  async (req, res) => {
       const result = await propertyCollection
         .find({ verificationStatus: "verified" })
         .toArray();
