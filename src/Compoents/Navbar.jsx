@@ -56,7 +56,7 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar  bg-slate-100 shadow-xl  mx-auto">
+    <div className="navbar   shadow-xl  mx-auto">
       <div className="flex-1">
         <div className="dropdown relative">
           <div tabIndex={0} role="button" className="btn btn-ghost ">
@@ -66,7 +66,7 @@ const Navbar = () => {
                 src="https://i.ibb.co/CVjTYfB/Screenshot-2024-06-01-123321.png"
                 alt=""
               />
-              <span className="font-bold text-4xl">EstateElite</span>
+              <span className="font-bold text-4xl">EestateElite</span>
             </NavLink>
           </div>
           <ul
