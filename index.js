@@ -38,6 +38,7 @@ const corsOptions = {
     "http://localhost:5173",
     "http://localhost:5174",
     "https://estateelite-fdfad.web.app",
+    "https://estateelite-fdfad.firebaseapp.com"
   ],
   credentials: true,
   optionSuccessStatus: 200,
