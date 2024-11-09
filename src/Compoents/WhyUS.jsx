@@ -6,7 +6,7 @@ const WhyUS = () => {
       <h1 className="text-3xl font-extrabold text-center mb-10 font-sans">Why Choose Us?</h1>
       <div className="grid gap-14 md:grid-cols-3 md:gap-5">
         <div className="rounded-xl border bg-slate-100 p-6 text-center shadow-xl">
-          <div className="mx-auto flex h-16 w-16 -translate-y-12 transform items-center justify-center rounded-full bg-teal-400 shadow-lg shadow-teal-500/40">
+          <div className="mx-auto flex h-16 w-16 transform items-center justify-center rounded-full bg-teal-400 shadow-lg shadow-teal-500/40">
             <svg
               viewBox="0 0 33 46"
               fill="none"
@@ -31,7 +31,7 @@ const WhyUS = () => {
           data-aos-delay="150"
           className="rounded-xl border bg-slate-100 p-6 text-center shadow-xl"
         >
-          <div className="mx-auto flex h-16 w-16 -translate-y-12 transform items-center justify-center rounded-full shadow-lg bg-rose-500 shadow-rose-500/40">
+          <div className="mx-auto flex h-16 w-16  transform items-center justify-center rounded-full shadow-lg bg-rose-500 shadow-rose-500/40">
             <svg
               viewBox=" 0 0 48 48"
               fill="none"
@@ -51,11 +51,12 @@ const WhyUS = () => {
             Enjoy a hassle-free property buying experience with our intuitive platform. From browsing listings to making offers and finalizing deals, our system ensures a smooth and efficient process.
           </p>
         </div>
+
         <div
           data-aos-delay="300"
           className="rounded-xl border bg-slate-100 p-6 text-center shadow-xl"
         >
-          <div className="mx-auto flex h-16 w-16 -translate-y-12 transform items-center justify-center rounded-full shadow-lg bg-sky-500 shadow-sky-500/40">
+          <div className="mx-auto flex h-16 w-16 transform items-center justify-center rounded-full shadow-lg bg-sky-500 shadow-sky-500/40">
             <svg
               viewBox="0 0 55 44"
               fill="none"
