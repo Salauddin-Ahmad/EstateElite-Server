@@ -240,10 +240,10 @@ async function run() {
     });
 
     // get all the propertyBought
-    app.get("/propertyBought/:email", verifyToken, async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
-      const bought = await propertyBought.find(query).toArray();
+    app.get("/propertyBought", verifyToken, async (req, res) => {
+      // const email = req.params.email;
+      // const query = { email };
+      const bought = await propertyBought.find({}).toArray();
       console.log(bought)
       res.send(bought);
     });
