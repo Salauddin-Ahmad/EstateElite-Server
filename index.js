@@ -208,6 +208,7 @@ async function run() {
       res.send(wishlists);
     });
 
+
     // get single wishlisted item by id
     app.get("/wishlisted/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
@@ -219,7 +220,7 @@ async function run() {
     });
 
     // delete wishlisted items with id
-    app.delete("/wishlisted/:id", verifyToken, async (req, res) => {
+    app.delete("/wishlistdelete/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { propertieId: id };
       console.log(id);
@@ -239,7 +240,7 @@ async function run() {
       res.send(result);
     });
 
-    // get all the propertyBought
+    // get all the propertyBought for user
     app.get("/propertyBought/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { buyerEmail: email };
@@ -247,6 +248,24 @@ async function run() {
       console.log(bought)
       res.send(bought);
     });
+
+    // get all rquested properties associated with a specific agent's email
+    app.get("/propertyBoughts/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+
+      try {
+        // Query to filter by agentEmail
+        const query = { agentEmail: email };
+        const properties = await propertyBought.find(query).toArray();
+
+        // Send the filtered data
+        res.send(properties);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        res.status(500).send({ error: "Failed to fetch properties." });
+      }
+    });
+
 
     // accepted rejected check
     app.patch("/requestedProp", async (req, res) => {
@@ -351,7 +370,7 @@ async function run() {
       res.send(result);
     });
 
-    // updating satuts with admin
+    // updating verication satuts with admin
     app.patch(
       "/updateStatus/:id",
       verifyToken,
