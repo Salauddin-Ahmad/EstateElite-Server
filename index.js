@@ -240,10 +240,10 @@ async function run() {
     });
 
     // get all the propertyBought
-    app.get("/propertyBought", verifyToken, async (req, res) => {
-      // const email = req.params.email;
-      // const query = { email };
-      const bought = await propertyBought.find({}).toArray();
+    app.get("/propertyBought/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      const query = { buyerEmail: email };
+      const bought = await propertyBought.find(query).toArray();
       console.log(bought)
       res.send(bought);
     });
@@ -286,12 +286,12 @@ async function run() {
     });
 
 
-      // get a user info by email from db
-      app.get('/user/:email', async (req, res) => {
-        const email = req.params.email
-        const result = await userCollection.findOne({ email })
-        res.send(result)
-      })
+    // get a user info by email from db
+    app.get('/user/:email', async (req, res) => {
+      const email = req.params.email
+      const result = await userCollection.findOne({ email })
+      res.send(result)
+    })
 
     // save the  user on db
     app.post("/users", async (req, res) => {
@@ -411,7 +411,7 @@ async function run() {
     app.get("/advertised", async (req, res) => {
       try {
         const properties = await propertyCollection
-          .find({"advertisement" : "true" })
+          .find({ "advertisement": "true" })
           .limit(9)
           .toArray();
         res.send(properties);
@@ -514,7 +514,7 @@ async function run() {
     });
 
     // get all properties which is verified
-    app.get("/propertiesVerified",  async (req, res) => {
+    app.get("/propertiesVerified", async (req, res) => {
       const result = await propertyCollection
         .find({ verificationStatus: "verified" })
         .toArray();
