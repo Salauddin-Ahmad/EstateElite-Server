@@ -564,6 +564,47 @@ async function run() {
       }
     );
 
+    // Endpoint to mark an agent as fraud
+   app.put('/markfraud/:id', async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    // Find the user by ID
+    const user = await user.findById(_id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (user.role !== 'agent') {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Only agents can be marked as fraud" 
+      });
+    }
+
+    // Delete all properties added by this agent
+    const deletedProperties = await propertyCollection.deleteMany({ addedBy: id });
+
+    // Update user role to 'fraud'
+    user.role = 'fraud';
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Agent marked as fraud. ${deletedProperties.deletedCount} properties removed.`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while marking the agent as fraud.",
+    });
+  }
+});
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
